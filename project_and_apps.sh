@@ -35,6 +35,10 @@ oc describe svc/app-cli
 # Events:            <none>
 
 
+# create route 
+oc expose svc/app-cli
+
+
 # build config (bc) info
 oc describe bc/app-cli
 # Name:		app-cli
