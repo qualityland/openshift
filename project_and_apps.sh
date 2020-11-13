@@ -8,6 +8,18 @@ oc login -u dev -p dev https://192.168.42.44:8443
 # web login: https://192.168.42.44:8443/console
 
 
+# show all projects
+oc config get-contexts
+
+
+# show your projects
+oc projects
+
+
+# change to an application
+oc <project-name>
+
+
 # create a new project (with user-friendly display name)
 oc new-project image-uploader --display-name='Image Uploader Project'
 
