@@ -5,17 +5,20 @@ eval $(minishift oc-env)
 oc login -u dev -p dev https://192.168.42.44:8443
 
 
+# find out as who you are logged in
+oc whoami
+
 # web login: https://192.168.42.44:8443/console
 
 
-# show all projects
+# show all projects of all users
 oc config get-contexts
 
 
 # show your projects
 oc projects
 
-
+ 
 # change to an application
 oc <project-name>
 
@@ -150,4 +153,62 @@ oc get pods
  app-cli-1-jwdv8   1/1       Running     8          13d
 
 
+# further pod info
+oc get pods -o wide
+
+# info on all resources (pods, replication controller, services, deployment
+# configs, build configs, imagestreams, routes)
+oc get all
+
+# demo chapter 3.4 - managing resources from the command line
+oc login -u developer -p developer
+oc new-project firstproject
+oc new-app --docker-image=nginx:1.14 --name=nginx
+oc status
+oc get pods
+oc describe pod <podname>
+oc get svc
+oc describe service nginx
+oc port-forward <podname> 33080:80
+curl -s http://localhost:33080
+
+
+# second demo chapter 3.4 - managing resources from the cli
+oc new-project mysql
+oc new-app --docker-image=mysql:latest --name=mysql-openshift \
+        -e MYSQL_USER=myuser \
+        -e MYSQL_PASSWORD=password \
+        -e MYSQL_DATABASE=mydb \
+        -e MYSQL_ROOT_PASSWORD=password
+        
+        
+# build an application from a git repository using the php image stream
+oc new-app php~http://gitserver.local/app --name=myapp
+
+
+# create only the yaml file to create a new application (without building)
+oc -o yaml new-app php~http://gitserver/local/app --name=myapp > s2i.yaml
+
+
 # 
+oc -o yaml new-app php~http://github.com/sandervanvugt/simpleapp \
+        --name=simple-app > simple-app.yaml
+        
+# show recent events
+oc get events
+
+# what happended in a specific pod
+oc logs <podname>
+
+# show all pod details
+oc describe pod <podname>
+
+# show all projects
+oc projects
+
+# delete everything using label 'simpleapp'
+oc delete all -l app=simpleapp
+
+# 
+oc delete all --all
+
